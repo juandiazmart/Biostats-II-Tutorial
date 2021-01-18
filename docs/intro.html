@@ -24,7 +24,7 @@
 <meta name="author" content="Juan Pablo Diaz Martinez" />
 
 
-<meta name="date" content="2021-01-17" />
+<meta name="date" content="2021-01-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -179,9 +179,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Regression, which is the main topic in this course, can be seen as a <strong>measurement error model</strong>. Under these models, we are interested in learning about some underlying pattern. One simple example is linear regression with one predictor with data measured with error, i.e., <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span>.</p>
 <div id="sampling-distribution" class="section level2">
 <h2><span class="header-section-number">2.1</span> Sampling distribution</h2>
-<p><strong>Sampling distribution</strong> may be considered as the distribution of the statistic for all possible samples from the same population of a given sample size.
-- Random sampling. Simple random sample of size <span class="math inline">\(n\)</span> from a population of size <span class="math inline">\(N\)</span>.
-- Measurement error model. Observations <span class="math inline">\(y_i\)</span> generated from the model <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span> with a prespecified distribution for the errors, e.g., <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\sigma)\)</span></p>
+<p><strong>Sampling distribution</strong> may be considered as the distribution of the statistic for all possible samples from the same population of a given sample size.</p>
+<ul>
+<li>Random sampling. Simple random sample of size <span class="math inline">\(n\)</span> from a population of size <span class="math inline">\(N\)</span>.</li>
+<li>Measurement error model. Observations <span class="math inline">\(y_i\)</span> generated from the model <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span> with a prespecified distribution for the errors, e.g., <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\sigma)\)</span></li>
+</ul>
 <p>Most of the time the sampling distribution will not be known, therefore we can only <strong>estimate</strong> it. Let’s see this using the following example using the previous measurment error model <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span>. We set up</p>
 <p><span class="math display">\[
 a=3,\space b=2,\space \epsilon_i \sim \mathcal{N}(0,1),\space x_i\sim\mathcal{N}(0,2); \space i=1,...,100
@@ -201,18 +203,18 @@ a=3,\space b=2,\space \epsilon_i \sim \mathcal{N}(0,1),\space x_i\sim\mathcal{N}
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -3.05227 -0.67541  0.03454  0.63157  1.93196 
+## -2.29722 -0.53285  0.03746  0.60208  2.39558 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  3.16148    0.09389   33.67   &lt;2e-16 ***
-## x            2.07163    0.04853   42.69   &lt;2e-16 ***
+## (Intercept)  2.83043    0.10575   26.76   &lt;2e-16 ***
+## x            1.97046    0.05512   35.75   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.9303 on 98 degrees of freedom
-## Multiple R-squared:  0.949,  Adjusted R-squared:  0.9485 
-## F-statistic:  1823 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 1.051 on 98 degrees of freedom
+## Multiple R-squared:  0.9288, Adjusted R-squared:  0.9281 
+## F-statistic:  1278 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
 <table>
 <caption><span id="tab:CI">Table 2.1: </span>95% CI for intercept and slope</caption>
 <thead>
@@ -225,13 +227,13 @@ a=3,\space b=2,\space \epsilon_i \sim \mathcal{N}(0,1),\space x_i\sim\mathcal{N}
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">2.975154</td>
-<td align="right">3.347808</td>
+<td align="right">2.620565</td>
+<td align="right">3.040294</td>
 </tr>
 <tr class="even">
 <td align="left">x</td>
-<td align="right">1.975334</td>
-<td align="right">2.167931</td>
+<td align="right">1.861086</td>
+<td align="right">2.079842</td>
 </tr>
 </tbody>
 </table>

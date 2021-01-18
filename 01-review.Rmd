@@ -13,6 +13,7 @@ Regression, which is the main topic in this course, can be seen as a **measureme
 ## Sampling distribution
 
 **Sampling distribution** may be considered as the distribution of the statistic for all possible samples from the same population of a given sample size.
+
 - Random sampling. Simple random sample of size $n$ from a population of size $N$.
 - Measurement error model. Observations $y_i$ generated from the model $y_i=a+bx_i+\epsilon_i$ with a prespecified distribution for the errors, e.g., $\epsilon_i \sim \mathcal{N}(0,\sigma)$
 
