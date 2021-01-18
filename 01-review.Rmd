@@ -1,0 +1,61 @@
+# Statistical inference {#intro}
+
+Statistical inference involves math operations that result in estimates (and its uncertainties) about paramaters of some underlying process. We can think it as a learning process; we learn from data (incomplete or imperfect) with the objective of informing the parameters under a probability model.
+
+*Questions*
+
+1. What type of probability model is involved in linear regression? 
+2. What about Fisher's exact test?
+3. What about nonparametric tests (Mann-Whitney etc.)?
+
+Regression, which is the main topic in this course, can be seen as a **measurement error model**. Under these models, we are interested in learning about some underlying pattern. One simple example is linear regression with one predictor with data measured with error, i.e., $y_i=a+bx_i+\epsilon_i$.
+
+## Sampling distribution
+
+**Sampling distribution** may be considered as the distribution of the statistic for all possible samples from the same population of a given sample size.
+- Random sampling. Simple random sample of size $n$ from a population of size $N$.
+- Measurement error model. Observations $y_i$ generated from the model $y_i=a+bx_i+\epsilon_i$ with a prespecified distribution for the errors, e.g., $\epsilon_i \sim \mathcal{N}(0,\sigma)$
+
+Most of the time the sampling distribution will not be known, therefore we can only **estimate** it. Let's see this using the following example using the previous measurment error model $y_i=a+bx_i+\epsilon_i$. We set up
+
+$$
+a=3,\space b=2,\space \epsilon_i \sim \mathcal{N}(0,1),\space x_i\sim\mathcal{N}(0,2); \space i=1,...,100
+$$
+
+```{r warning=FALSE,message=FALSE}
+a=3
+b=2
+n=100
+epsilon=rnorm(n,0,1)
+x=rnorm(n,0,2)
+y=a+b*x+epsilon
+```
+
+Now let's fit a linear model to our fake data. Table \@ref(tab:CI) shows the 95% CI for the fitted slope and intercept.
+
+```{r warning=FALSE,message=FALSE}
+model=lm(y~x)
+summary(model)
+```
+
+```{r CI,echo=FALSE}
+kable(confint(model), caption = '95% CI for intercept and slope',
+  booktabs = TRUE)
+```
+
+Some authors say that the sampling distribution is a **generative model** because it represents a random process wich could potentially generate new data.
+
+## Estimates and standard erors
+
+**Parameters** are unknown numbers that determine a statistical model. As mentioned before, we learn from data to construct **estimates** of parameters.
+
+*Question*
+
+1. What are the parameters in the measurement error model used previously?
+
+The **standard error** is the standard deviation of an estimate. It gives us an idea of the uncertainty sorrounding the quantity of interest. As sample size increases, the standard error decreases, i.e.,
+
+$$
+SE=\frac{\sigma}{n} \implies \lim_{n\to\infty}\frac{\sigma}{n}=0
+$$
+

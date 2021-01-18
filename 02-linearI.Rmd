@@ -1,0 +1,83 @@
+# Linear regression
+
+## Background
+
+- Simplest regression model: $y=a+bx+error$
+- Additional predictors: : $y=\beta_0+\beta_1x_1+...+\beta_kx_k+error$
+- Nonlinear models: $\log y=a+b \log x+error$
+- Nonadditive models: $y=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_1x_2+error$
+- Generalized linear models: Non-normal additive errors with a function that "links" the linear predictor with the outcome.
+
+## Simple regression with fake data
+
+Same as Chapter \@ref(intro)
+
+```{r warning=FALSE,message=FALSE}
+x=1:20
+n=length(x)
+a=0.2
+b=0.3
+sigma=0.5
+y=a + b*x + sigma*rnorm(n)
+```
+
+```{r warning=FALSE,message=FALSE}
+fit=lm(y~x)
+summary(fit)
+```
+
+```{r echo=FALSE}
+kable(confint(fit), caption = '95% CI for intercept and slope',
+  booktabs = TRUE)
+```
+
+*Questions*
+
+1. Are estimates consistent with true values?
+2. What can you tell about the uncertainty surrounding the coefficients?
+
+We can also plot the data and fitter regression line (Figure \@ref(fig:fig1)).
+
+```{r fig1, warning=FALSE,message=FALSE, fig.cap="Observed and fitted"}
+plot(x, y, main="Data and fitted regression line")
+a_hat=coef(fit)[1]
+b_hat=coef(fit)[2]
+abline(a_hat, b_hat)
+```
+
+## Interpretation of coefficients and model diagnostics
+
+*Linear regression assumptions*
+
+1. Normality of residuals.
+2. Linear relationship.
+3. Constant variance.
+4. $y_i$ are independent.
+
+
+Let's start using real data. Below we can see a brief description about the dataset used in this example.
+
+```{r warning=FALSE,message=FALSE,eval=FALSE}
+install.packages("datarium") # Install to access the dataset
+?marketing #description of the dataset
+library(datarium)
+head(marketing)
+```
+
+```{r warning=FALSE,message=FALSE,echo=FALSE}
+library(datarium)
+kable(head(marketing), booktabs = TRUE)
+```
+
+We build a model to predict sales on the basis of advertising budget spent in youtube **and** facebook. It is important to notice the nonadditive model used here and the implications of interaction terms.
+
+```{r warning=FALSE,message=FALSE,eval}
+fit2=lm(sales ~ youtube*facebook, data = marketing)
+summary(fit2)
+```
+
+Also we plot some regression diagnostics.
+
+```{r fig2, warning=FALSE,message=FALSE}
+plot(fit2)
+```

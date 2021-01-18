@@ -1,0 +1,11 @@
+tab:CI
+tab:unnamed-chunk-5
+fig:fig1
+introduction
+intro
+sampling-distribution
+estimates-and-standard-erors
+linear-regression
+background
+simple-regression-with-fake-data
+interpretation-of-coefficients-and-model-diagnostics

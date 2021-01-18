@@ -1,0 +1,24 @@
+--- 
+title: "Tutorial notes for Biostatistics II"
+author: "Juan Pablo Diaz Martinez"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: book.bib
+biblio-style: apalike
+link-citations: yes
+description: This is a minimal example of using the bookdown package to write a book.
+  The output format for this example is bookdown::gitbook.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
+
+
+# Introduction
+
+These notes are based on "Regression and other stories" by @gelman2020regression. Given the different background in statistics that we potentially have, this notes aim to have a standardized tool for tutorials. 
+
+Finally, these notes aim to cover the same content as weekly lectures.
