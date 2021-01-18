@@ -1,6 +1,6 @@
 book_filename: "Notes"
 delete_merged_file: true
-output_dir: _docs
+output_dir: docs
 language:
   ui:
     chapter_name: "Chapter "
