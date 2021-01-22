@@ -24,7 +24,7 @@
 <meta name="author" content="Juan Pablo Diaz Martinez" />
 
 
-<meta name="date" content="2021-01-18" />
+<meta name="date" content="2021-01-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="intro.html"/>
-<link rel="next" href="references.html"/>
+<link rel="next" href="logistic-regression.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -145,6 +145,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1" data-path="linear-regression.html"><a href="linear-regression.html#background"><i class="fa fa-check"></i><b>3.1</b> Background</a></li>
 <li class="chapter" data-level="3.2" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-with-fake-data"><i class="fa fa-check"></i><b>3.2</b> Simple regression with fake data</a></li>
 <li class="chapter" data-level="3.3" data-path="linear-regression.html"><a href="linear-regression.html#interpretation-of-coefficients-and-model-diagnostics"><i class="fa fa-check"></i><b>3.3</b> Interpretation of coefficients and model diagnostics</a></li>
+<li class="chapter" data-level="3.4" data-path="linear-regression.html"><a href="linear-regression.html#outliers-and-how-to-diagnose-them"><i class="fa fa-check"></i><b>3.4</b> Outliers and how to diagnose them</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="linear-regression.html"><a href="linear-regression.html#studentized-resiudals"><i class="fa fa-check"></i><b>3.4.1</b> Studentized resiudals</a></li>
+<li class="chapter" data-level="3.4.2" data-path="linear-regression.html"><a href="linear-regression.html#difference-in-fits-dffits"><i class="fa fa-check"></i><b>3.4.2</b> Difference in Fits (DFFITS)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>4</b> Logistic regression</a><ul>
+<li class="chapter" data-level="4.1" data-path="logistic-regression.html"><a href="logistic-regression.html#interpretation-of-coefficients-and-model-diagnostics-1"><i class="fa fa-check"></i><b>4.1</b> Interpretation of coefficients and model diagnostics</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -195,19 +202,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## lm(formula = y ~ x)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -0.9496 -0.3688  0.1142  0.3789  0.9352 
+##      Min       1Q   Median       3Q      Max 
+## -0.67613 -0.39121  0.08526  0.22592  0.77421 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  0.07219    0.24416   0.296    0.771    
-## x            0.32277    0.02038  15.836 5.18e-12 ***
+## (Intercept)  0.06941    0.20653   0.336    0.741    
+## x            0.30489    0.01724  17.685 7.97e-13 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.5256 on 18 degrees of freedom
-## Multiple R-squared:  0.933,  Adjusted R-squared:  0.9293 
-## F-statistic: 250.8 on 1 and 18 DF,  p-value: 5.184e-12</code></pre>
+## Residual standard error: 0.4446 on 18 degrees of freedom
+## Multiple R-squared:  0.9456, Adjusted R-squared:  0.9426 
+## F-statistic: 312.7 on 1 and 18 DF,  p-value: 7.966e-13</code></pre>
 <table>
 <caption><span id="tab:unnamed-chunk-5">Table 3.1: </span>95% CI for intercept and slope</caption>
 <thead>
@@ -220,13 +227,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-0.4407567</td>
-<td align="right">0.5851465</td>
+<td align="right">-0.3644844</td>
+<td align="right">0.5033083</td>
 </tr>
 <tr class="even">
 <td align="left">x</td>
-<td align="right">0.2799450</td>
-<td align="right">0.3655858</td>
+<td align="right">0.2686696</td>
+<td align="right">0.3411115</td>
 </tr>
 </tbody>
 </table>
@@ -335,7 +342,54 @@ Figure 3.1: Observed and fitted
 <p>Also we plot some regression diagnostics.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="linear-regression.html#cb11-1"></a><span class="kw">plot</span>(fit2)</span></code></pre></div>
 <p><img src="Notes_files/figure-html/fig2-1.png" width="672" /><img src="Notes_files/figure-html/fig2-2.png" width="672" /><img src="Notes_files/figure-html/fig2-3.png" width="672" /><img src="Notes_files/figure-html/fig2-4.png" width="672" /></p>
+</div>
+<div id="outliers-and-how-to-diagnose-them" class="section level2">
+<h2><span class="header-section-number">3.4</span> Outliers and how to diagnose them</h2>
+<p>Let’s recall our linear model, i.e., <span class="math inline">\(y_i=a+bx_i+\epsilon_i\space \epsilon_i\sim \mathcal{N}(0,\sigma)\)</span>. Why is important to check the outliers after fitting our model? Because sometimes we can encounter potential outliers that could influence the regression model in the sense of pulling our fitted model towards these outliers.</p>
+<div id="studentized-resiudals" class="section level3">
+<h3><span class="header-section-number">3.4.1</span> Studentized resiudals</h3>
+<p>After fitting our linear model, we get</p>
+<p><span class="math display">\[
+y_i=\hat{a}+\hat{b}x_i+d_i \implies d_i=y_i-\hat{y_i}
+\]</span>
+where <span class="math inline">\(d_i\)</span> denotes the residual for observation <span class="math inline">\(i\)</span> and <span class="math inline">\(\hat{y_i}=\hat{a}+\hat{b}x_i\)</span>. Let’s plot again our fitted values vs residuals in our previous model. How large is large?</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="linear-regression.html#cb12-1"></a><span class="kw">plot</span>(fit2,<span class="dv">1</span>)</span></code></pre></div>
+<p><img src="Notes_files/figure-html/fig3-1.png" width="672" /></p>
+<p>In order to answer the previous question, we standardize our residuals, i.e.,</p>
+<p><span class="math display">\[
+t_i=\frac{d_i}{sd(d_i)}
+\]</span>
+This studentized residuals follow a student’s t distribution, i.e., <span class="math inline">\(t_i\sim t_{n-p-1}\)</span> where <span class="math inline">\(p\)</span> is the number of coefficients in our regression model.</p>
+<p><strong>Questions</strong></p>
+<ol style="list-style-type: decimal">
+<li>Why do residuals <span class="math inline">\(&gt;2\)</span> warrant attention?</li>
+</ol>
+</div>
+<div id="difference-in-fits-dffits" class="section level3">
+<h3><span class="header-section-number">3.4.2</span> Difference in Fits (DFFITS)</h3>
+<p>Are outliers bad when fitting a linear model? Not necessarily. We can have outliers which are not influential in our fitted model. The idea behind diagnosing influential observations is to delete the observations one at a time, each time refitting the regression model on the remaining <span class="math inline">\(n–1\)</span> observations.</p>
+<p>The difference in fits for observation <span class="math inline">\(i\)</span>, denoted <span class="math inline">\(DFFITS_i\)</span>, is defined as:</p>
+<p><span class="math display">\[
+DFFITS_i=\frac{\hat{y_i}-\hat{y}_{(i)}}{sd(\hat{y_i}-\hat{y}_{(i)})}
+\]</span>
+where <span class="math inline">\(\hat{y}_{(i)}\)</span> denotes the fitted response when observation <span class="math inline">\(i\)</span> is removed. Going back to our previous example, Figure <a href="linear-regression.html#fig:fig4">3.2</a> shows how influential our observations can be</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="linear-regression.html#cb13-1"></a><span class="kw">plot</span>(<span class="kw">dffits</span>(fit2))</span></code></pre></div>
+<div class="figure"><span id="fig:fig4"></span>
+<img src="Notes_files/figure-html/fig4-1.png" alt="DFFITS" width="672" />
+<p class="caption">
+Figure 3.2: DFFITS
+</p>
+</div>
+<p><span class="math inline">\(DFFITS_i\)</span> can also be expressed as</p>
+<p><span class="math display">\[
+DFFITS_i=t_{(i)}\sqrt{\frac{h_{ii}}{1-h_{ii}}}
+\]</span></p>
+<p>where <span class="math inline">\(t_{(i)}\)</span> is the externally studentized residual and <span class="math inline">\(h_ii\)</span> represents the <strong>leverage</strong>. The leverage <span class="math inline">\(h_ii\)</span> is a measure of the distance between the <span class="math inline">\(x\)</span> value for the <span class="math inline">\(i\)</span>th data point and the mean of the <span class="math inline">\(x\)</span> values for all <span class="math inline">\(n\)</span> data points. For a perfectly balanced experimental design, the leverage for each point is <span class="math inline">\(p/n\)</span>, therefore</p>
+<p><span class="math display">\[
+DFFITS_i=t_{(i)}\sqrt{\frac{p}{n}}
+\]</span></p>
 
+</div>
 </div>
 </div>
             </section>
@@ -344,7 +398,7 @@ Figure 3.1: Observed and fitted
         </div>
       </div>
 <a href="intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="logistic-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

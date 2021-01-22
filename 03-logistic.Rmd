@@ -1,0 +1,71 @@
+# Logistic regression
+
+Recall the linear model $y=a+bx+error$. To model binary data, it is clear that $a+bx$ is unbounded. Therefore we need some kind of transformation that bounds the output between 0 and 1, and a model that treats the resulting numbers as probabilities and maps
+them into random binary outcomes.
+
+The  **logistic** function,
+
+$$
+logit(x)=\log \left (\frac{x}{1-x}\right)
+$$
+which maps the range (0,1) to the real line $(-\infty,\infty)$. Its inverse function, maps back to the unit range
+
+$$
+logit^{-1}(x)=\frac{\exp{(x)}}{1+\exp{(x)}}
+$$
+
+The idea of logistic regression is to model the probability that $y=1$ as
+
+$$
+\begin{aligned}
+\mathbb{P}[y_i=1] &= p_i \\
+logit(p_i) &= X_i\beta
+\end{aligned}
+$$
+## Assumptions
+
+## Interpretation of coefficients and model diagnostics
+
+*Logistic regression diagnostics*
+
+1. Model fit.
+2. No influential observations.
+
+First we need to load the dataset to be used in this chapter.
+
+```{r warning=FALSE,message=FALSE}
+df=read.csv("data/tutorial2.csv")
+kable(head(df), booktabs = TRUE)
+df$Treatment=as.factor(df$Treatment)
+df$Pain=as.factor(df$Pain)
+df$Sex=as.factor(df$Sex)
+```
+
+Same as our previous chapter, we build a model to investigate the relationship between pain and other covariates.
+
+```{r warning=FALSE,message=FALSE}
+fit3=glm(Pain ~ Treatment+Sex+Treatment*Sex+Age+Duration, data = df,family = binomial)
+summary(fit3)
+```
+
+By default, estimates in `R` are shown as log-odds. If we want to get the odd ratios (ORs) we just need to exponentiate them (applies also to confidence intervals)
+
+```{r warning=FALSE,message=FALSE}
+ORs=exp(cbind(OR = coef(fit3), confint(fit3)))
+kable(ORs, booktabs = TRUE)
+```
+
+**Questions**
+
+1. Whay an you say about the CIs for  the `treatment` variable?
+
+We can now check our model fit with the Hosmer-Lemeshow test. 
+
+```{r warning=FALSE,message=FALSE,eval=FALSE}
+install.packages("ResourceSelection") # Install to access functions
+```
+
+```{r warning=FALSE,message=FALSE,eval}
+library(ResourceSelection)
+hoslem.test(fit3$y, fitted(fit3), g=10)
+```

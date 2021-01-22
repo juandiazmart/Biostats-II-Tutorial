@@ -71,7 +71,7 @@ kable(head(marketing), booktabs = TRUE)
 
 We build a model to predict sales on the basis of advertising budget spent in youtube **and** facebook. It is important to notice the nonadditive model used here and the implications of interaction terms.
 
-```{r warning=FALSE,message=FALSE,eval}
+```{r warning=FALSE,message=FALSE}
 fit2=lm(sales ~ youtube*facebook, data = marketing)
 summary(fit2)
 ```
@@ -81,3 +81,58 @@ Also we plot some regression diagnostics.
 ```{r fig2, warning=FALSE,message=FALSE}
 plot(fit2)
 ```
+
+## Outliers and how to diagnose them
+
+Let's recall our linear model, i.e., $y_i=a+bx_i+\epsilon_i\space \epsilon_i\sim \mathcal{N}(0,\sigma)$. Why is important to check the outliers after fitting our model? Because sometimes we can encounter potential outliers that could influence the regression model in the sense of pulling our fitted model towards these outliers. 
+
+### Studentized resiudals
+
+After fitting our linear model, we get
+
+$$
+y_i=\hat{a}+\hat{b}x_i+d_i \implies d_i=y_i-\hat{y_i}
+$$
+where $d_i$ denotes the residual for observation $i$ and $\hat{y_i}=\hat{a}+\hat{b}x_i$. Let's plot again our fitted values vs residuals in our previous model. How large is large? 
+
+```{r fig3, warning=FALSE,message=FALSE}
+plot(fit2,1)
+```
+
+In order to answer the previous question, we standardize our residuals, i.e.,
+
+$$
+t_i=\frac{d_i}{sd(d_i)}
+$$
+This studentized residuals follow a student's t distribution, i.e., $t_i\sim t_{n-p-1}$ where $p$ is the number of coefficients in our regression model.
+
+**Questions**
+
+1. Why do residuals $>2$ warrant attention?
+
+### Difference in Fits (DFFITS)
+
+Are outliers bad when fitting a linear model? Not necessarily. We can have outliers which are not influential in our fitted model. The idea behind diagnosing influential observations is to delete the observations one at a time, each time refitting the regression model on the remaining $n–1$ observations. 
+
+The difference in fits for observation $i$, denoted $DFFITS_i$, is defined as:
+
+$$
+DFFITS_i=\frac{\hat{y_i}-\hat{y}_{(i)}}{sd(\hat{y_i}-\hat{y}_{(i)})}
+$$
+where $\hat{y}_{(i)}$ denotes the fitted response when observation $i$ is removed. Going back to our previous example, Figure \@ref(fig:fig4) shows how influential our observations can be
+
+```{r fig4, warning=FALSE,message=FALSE,fig.cap="DFFITS"}
+plot(dffits(fit2))
+```
+
+$DFFITS_i$ can also be expressed as
+
+$$
+DFFITS_i=t_{(i)}\sqrt{\frac{h_{ii}}{1-h_{ii}}}
+$$
+
+where $t_{(i)}$ is the externally studentized residual and $h_ii$ represents the **leverage**. The leverage $h_ii$ is a measure of the distance between the $x$ value for the $i$th data point and the mean of the $x$ values for all $n$ data points. For a perfectly balanced experimental design, the leverage for each point is $p/n$, therefore
+
+$$
+DFFITS_i=t_{(i)}\sqrt{\frac{p}{n}}
+$$

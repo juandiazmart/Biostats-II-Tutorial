@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>References | Tutorial notes for Biostatistics II</title>
+  <title>Chapter 4 Logistic regression | Tutorial notes for Biostatistics II</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="References | Tutorial notes for Biostatistics II" />
+  <meta property="og:title" content="Chapter 4 Logistic regression | Tutorial notes for Biostatistics II" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="References | Tutorial notes for Biostatistics II" />
+  <meta name="twitter:title" content="Chapter 4 Logistic regression | Tutorial notes for Biostatistics II" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="logistic-regression.html"/>
-
+<link rel="prev" href="linear-regression.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -174,13 +174,203 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="logistic-regression" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Logistic regression</h1>
+<p>Recall the linear model <span class="math inline">\(y=a+bx+error\)</span>. To model binary data, it is clear that <span class="math inline">\(a+bx\)</span> is unbounded. Therefore we need some kind of transformation that bounds the output between 0 and 1, and a model that treats the resulting numbers as probabilities and maps
+them into random binary outcomes.</p>
+<p>The <strong>logistic</strong> function,</p>
+<p><span class="math display">\[
+logit(x)=\log \left (\frac{x}{1-x}\right)
+\]</span>
+which maps the range (0,1) to the real line <span class="math inline">\((-\infty,\infty)\)</span>. Its inverse function, maps back to the unit range</p>
+<p><span class="math display">\[
+logit^{-1}(x)=\frac{\exp{(x)}}{1+\exp{(x)}}
+\]</span></p>
+<p>The idea of logistic regression is to model the probability that <span class="math inline">\(y=1\)</span> as</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbb{P}[y_i=1] &amp;= p_i \\
+logit(p_i) &amp;= X_i\beta
+\end{aligned}
+\]</span>
+## Assumptions</p>
+<div id="interpretation-of-coefficients-and-model-diagnostics-1" class="section level2">
+<h2><span class="header-section-number">4.1</span> Interpretation of coefficients and model diagnostics</h2>
+<p><em>Logistic regression diagnostics</em></p>
+<ol style="list-style-type: decimal">
+<li>Model fit.</li>
+<li>No influential observations.</li>
+</ol>
+<p>First we need to load the dataset to be used in this chapter.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="logistic-regression.html#cb14-1"></a>df=<span class="kw">read.csv</span>(<span class="st">&quot;data/tutorial2.csv&quot;</span>)</span>
+<span id="cb14-2"><a href="logistic-regression.html#cb14-2"></a><span class="kw">kable</span>(<span class="kw">head</span>(df), <span class="dt">booktabs =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Treatment</th>
+<th align="left">Sex</th>
+<th align="right">Age</th>
+<th align="right">Duration</th>
+<th align="left">Pain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">P</td>
+<td align="left">F</td>
+<td align="right">68</td>
+<td align="right">1</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="left">M</td>
+<td align="right">74</td>
+<td align="right">16</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">P</td>
+<td align="left">F</td>
+<td align="right">67</td>
+<td align="right">30</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">P</td>
+<td align="left">M</td>
+<td align="right">66</td>
+<td align="right">26</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">B</td>
+<td align="left">F</td>
+<td align="right">67</td>
+<td align="right">28</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">B</td>
+<td align="left">F</td>
+<td align="right">77</td>
+<td align="right">16</td>
+<td align="left">No</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="logistic-regression.html#cb15-1"></a>df<span class="op">$</span>Treatment=<span class="kw">as.factor</span>(df<span class="op">$</span>Treatment)</span>
+<span id="cb15-2"><a href="logistic-regression.html#cb15-2"></a>df<span class="op">$</span>Pain=<span class="kw">as.factor</span>(df<span class="op">$</span>Pain)</span>
+<span id="cb15-3"><a href="logistic-regression.html#cb15-3"></a>df<span class="op">$</span>Sex=<span class="kw">as.factor</span>(df<span class="op">$</span>Sex)</span></code></pre></div>
+<p>Same as our previous chapter, we build a model to investigate the relationship between pain and other covariates.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="logistic-regression.html#cb16-1"></a>fit3=<span class="kw">glm</span>(Pain <span class="op">~</span><span class="st"> </span>Treatment<span class="op">+</span>Sex<span class="op">+</span>Treatment<span class="op">*</span>Sex<span class="op">+</span>Age<span class="op">+</span>Duration, <span class="dt">data =</span> df,<span class="dt">family =</span> binomial)</span>
+<span id="cb16-2"><a href="logistic-regression.html#cb16-2"></a><span class="kw">summary</span>(fit3)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = Pain ~ Treatment + Sex + Treatment * Sex + Age + 
+##     Duration, family = binomial, data = df)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.8542  -0.6273  -0.1993   0.6037   2.2047  
+## 
+## Coefficients:
+##                  Estimate Std. Error z value Pr(&gt;|z|)   
+## (Intercept)     -20.78814    7.18282  -2.894  0.00380 **
+## TreatmentB       -0.89641    1.64483  -0.545  0.58576   
+## TreatmentP        2.83808    1.32379   2.144  0.03204 * 
+## SexM              1.43252    1.33133   1.076  0.28192   
+## Age               0.26875    0.09964   2.697  0.00699 **
+## Duration         -0.00523    0.03330  -0.157  0.87518   
+## TreatmentB:SexM   0.49954    1.92350   0.260  0.79509   
+## TreatmentP:SexM   0.70670    1.93771   0.365  0.71533   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 81.503  on 59  degrees of freedom
+## Residual deviance: 48.596  on 52  degrees of freedom
+## AIC: 64.596
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<p>By default, estimates in <code>R</code> are shown as log-odds. If we want to get the odd ratios (ORs) we just need to exponentiate them (applies also to confidence intervals)</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="logistic-regression.html#cb18-1"></a>ORs=<span class="kw">exp</span>(<span class="kw">cbind</span>(<span class="dt">OR =</span> <span class="kw">coef</span>(fit3), <span class="kw">confint</span>(fit3)))</span>
+<span id="cb18-2"><a href="logistic-regression.html#cb18-2"></a><span class="kw">kable</span>(ORs, <span class="dt">booktabs =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">OR</th>
+<th align="right">2.5 %</th>
+<th align="right">97.5 %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.0000000</td>
+<td align="right">0.0000000</td>
+<td align="right">0.0002309</td>
+</tr>
+<tr class="even">
+<td align="left">TreatmentB</td>
+<td align="right">0.4080301</td>
+<td align="right">0.0113346</td>
+<td align="right">13.9284003</td>
+</tr>
+<tr class="odd">
+<td align="left">TreatmentP</td>
+<td align="right">17.0830112</td>
+<td align="right">1.6920908</td>
+<td align="right">434.6827048</td>
+</tr>
+<tr class="even">
+<td align="left">SexM</td>
+<td align="right">4.1892546</td>
+<td align="right">0.3700386</td>
+<td align="right">104.5704058</td>
+</tr>
+<tr class="odd">
+<td align="left">Age</td>
+<td align="right">1.3083321</td>
+<td align="right">1.1009612</td>
+<td align="right">1.6382785</td>
+</tr>
+<tr class="even">
+<td align="left">Duration</td>
+<td align="right">0.9947833</td>
+<td align="right">0.9293463</td>
+<td align="right">1.0610565</td>
+</tr>
+<tr class="odd">
+<td align="left">TreatmentB:SexM</td>
+<td align="right">1.6479605</td>
+<td align="right">0.0311099</td>
+<td align="right">93.0296128</td>
+</tr>
+<tr class="even">
+<td align="left">TreatmentP:SexM</td>
+<td align="right">2.0272960</td>
+<td align="right">0.0381990</td>
+<td align="right">121.1555591</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Questions</strong></p>
+<ol style="list-style-type: decimal">
+<li>Whay an you say about the CIs for the <code>treatment</code> variable?</li>
+</ol>
+<p>We can now check our model fit with the Hosmer-Lemeshow test.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="logistic-regression.html#cb19-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;ResourceSelection&quot;</span>) <span class="co"># Install to access functions</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="logistic-regression.html#cb20-1"></a><span class="kw">library</span>(ResourceSelection)</span>
+<span id="cb20-2"><a href="logistic-regression.html#cb20-2"></a><span class="kw">hoslem.test</span>(fit3<span class="op">$</span>y, <span class="kw">fitted</span>(fit3), <span class="dt">g=</span><span class="dv">10</span>)</span></code></pre></div>
+<pre><code>## 
+##  Hosmer and Lemeshow goodness of fit (GOF) test
+## 
+## data:  fit3$y, fitted(fit3)
+## X-squared = 9.3995, df = 8, p-value = 0.3097</code></pre>
 
-<div id="refs" class="references">
-<div>
-<p>Gelman, Andrew, Jennifer Hill, and Aki Vehtari. 2020. <em>Regression and Other Stories</em>. Cambridge University Press.</p>
-</div>
 </div>
 </div>
             </section>
@@ -188,8 +378,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="logistic-regression.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

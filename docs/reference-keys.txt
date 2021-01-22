@@ -1,6 +1,7 @@
 tab:CI
 tab:unnamed-chunk-5
 fig:fig1
+fig:fig4
 introduction
 intro
 sampling-distribution
@@ -9,3 +10,8 @@ linear-regression
 background
 simple-regression-with-fake-data
 interpretation-of-coefficients-and-model-diagnostics
+outliers-and-how-to-diagnose-them
+studentized-resiudals
+difference-in-fits-dffits
+logistic-regression
+interpretation-of-coefficients-and-model-diagnostics-1
