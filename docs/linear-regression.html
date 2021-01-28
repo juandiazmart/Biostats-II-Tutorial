@@ -24,7 +24,7 @@
 <meta name="author" content="Juan Pablo Diaz Martinez" />
 
 
-<meta name="date" content="2021-01-22" />
+<meta name="date" content="2021-01-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -146,12 +146,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-with-fake-data"><i class="fa fa-check"></i><b>3.2</b> Simple regression with fake data</a></li>
 <li class="chapter" data-level="3.3" data-path="linear-regression.html"><a href="linear-regression.html#interpretation-of-coefficients-and-model-diagnostics"><i class="fa fa-check"></i><b>3.3</b> Interpretation of coefficients and model diagnostics</a></li>
 <li class="chapter" data-level="3.4" data-path="linear-regression.html"><a href="linear-regression.html#outliers-and-how-to-diagnose-them"><i class="fa fa-check"></i><b>3.4</b> Outliers and how to diagnose them</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="linear-regression.html"><a href="linear-regression.html#studentized-resiudals"><i class="fa fa-check"></i><b>3.4.1</b> Studentized resiudals</a></li>
+<li class="chapter" data-level="3.4.1" data-path="linear-regression.html"><a href="linear-regression.html#studentized-residuals"><i class="fa fa-check"></i><b>3.4.1</b> Studentized residuals</a></li>
 <li class="chapter" data-level="3.4.2" data-path="linear-regression.html"><a href="linear-regression.html#difference-in-fits-dffits"><i class="fa fa-check"></i><b>3.4.2</b> Difference in Fits (DFFITS)</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>4</b> Logistic regression</a><ul>
 <li class="chapter" data-level="4.1" data-path="logistic-regression.html"><a href="logistic-regression.html#interpretation-of-coefficients-and-model-diagnostics-1"><i class="fa fa-check"></i><b>4.1</b> Interpretation of coefficients and model diagnostics</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a><ul>
+<li class="chapter" data-level="5.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#introduction-1"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson-regression"><i class="fa fa-check"></i><b>5.2</b> Poisson regression</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#exposure"><i class="fa fa-check"></i><b>5.2.1</b> Exposure</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial-regression-model"><i class="fa fa-check"></i><b>5.3</b> Negative Binomial regression model</a></li>
+<li class="chapter" data-level="5.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example-pest-management-on-roaches-reducing-cockroach-level"><i class="fa fa-check"></i><b>5.4</b> Example: pest management on Roaches reducing cockroach level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -202,19 +210,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## lm(formula = y ~ x)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.67613 -0.39121  0.08526  0.22592  0.77421 
+##     Min      1Q  Median      3Q     Max 
+## -1.2818 -0.3297  0.1485  0.3455  0.7723 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  0.06941    0.20653   0.336    0.741    
-## x            0.30489    0.01724  17.685 7.97e-13 ***
+## (Intercept)  0.24254    0.26314   0.922    0.369    
+## x            0.29985    0.02197  13.650 6.18e-11 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.4446 on 18 degrees of freedom
-## Multiple R-squared:  0.9456, Adjusted R-squared:  0.9426 
-## F-statistic: 312.7 on 1 and 18 DF,  p-value: 7.966e-13</code></pre>
+## Residual standard error: 0.5665 on 18 degrees of freedom
+## Multiple R-squared:  0.9119, Adjusted R-squared:  0.907 
+## F-statistic: 186.3 on 1 and 18 DF,  p-value: 6.177e-11</code></pre>
 <table>
 <caption><span id="tab:unnamed-chunk-5">Table 3.1: </span>95% CI for intercept and slope</caption>
 <thead>
@@ -227,13 +235,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-0.3644844</td>
-<td align="right">0.5033083</td>
+<td align="right">-0.3103012</td>
+<td align="right">0.7953908</td>
 </tr>
 <tr class="even">
 <td align="left">x</td>
-<td align="right">0.2686696</td>
-<td align="right">0.3411115</td>
+<td align="right">0.2537007</td>
+<td align="right">0.3460021</td>
 </tr>
 </tbody>
 </table>
@@ -345,9 +353,9 @@ Figure 3.1: Observed and fitted
 </div>
 <div id="outliers-and-how-to-diagnose-them" class="section level2">
 <h2><span class="header-section-number">3.4</span> Outliers and how to diagnose them</h2>
-<p>Let’s recall our linear model, i.e., <span class="math inline">\(y_i=a+bx_i+\epsilon_i\space \epsilon_i\sim \mathcal{N}(0,\sigma)\)</span>. Why is important to check the outliers after fitting our model? Because sometimes we can encounter potential outliers that could influence the regression model in the sense of pulling our fitted model towards these outliers.</p>
-<div id="studentized-resiudals" class="section level3">
-<h3><span class="header-section-number">3.4.1</span> Studentized resiudals</h3>
+<p>Let’s recall our linear model, i.e., <span class="math inline">\(y_i=a+bx_i+\epsilon_i,\quad \epsilon_i\sim \mathcal{N}(0,\sigma)\)</span>. Why is important to check the outliers after fitting our model? Because sometimes we can encounter potential outliers that could influence the regression model in the sense of pulling our fitted model towards these outliers.</p>
+<div id="studentized-residuals" class="section level3">
+<h3><span class="header-section-number">3.4.1</span> Studentized residuals</h3>
 <p>After fitting our linear model, we get</p>
 <p><span class="math display">\[
 y_i=\hat{a}+\hat{b}x_i+d_i \implies d_i=y_i-\hat{y_i}

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Statistical inference | Tutorial notes for Biostatistics II</title>
+  <title>Chapter 5 Generalized linear models | Tutorial notes for Biostatistics II</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Statistical inference | Tutorial notes for Biostatistics II" />
+  <meta property="og:title" content="Chapter 5 Generalized linear models | Tutorial notes for Biostatistics II" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Statistical inference | Tutorial notes for Biostatistics II" />
+  <meta name="twitter:title" content="Chapter 5 Generalized linear models | Tutorial notes for Biostatistics II" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="linear-regression.html"/>
+<link rel="prev" href="logistic-regression.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -182,89 +182,167 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1">
-<h1><span class="header-section-number">Chapter 2</span> Statistical inference</h1>
-<p>Statistical inference involves math operations that result in estimates (and its uncertainties) about paramaters of some underlying process. We can think it as a learning process; we learn from data (incomplete or imperfect) with the objective of informing the parameters under a probability model.</p>
+<div id="generalized-linear-models" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Generalized linear models</h1>
+<div id="introduction-1" class="section level2">
+<h2><span class="header-section-number">5.1</span> Introduction</h2>
+<p><strong>Generalized linear modeling</strong> (GLM) is a framework which encompasses linear and logistic regression as special cases. It involves:</p>
+<ol style="list-style-type: decimal">
+<li>An outcome <span class="math inline">\(y=(y_1,\dots,y_n)\)</span></li>
+<li>A matrix of predictors <span class="math inline">\(X\)</span> and a vector of coefficients <span class="math inline">\(\beta\)</span>, which turns into the linear predictor <span class="math inline">\(X\beta\)</span></li>
+<li>A <strong>link function</strong> <span class="math inline">\(g\)</span>, which maps the linear predictor with the outcome <span class="math inline">\(\hat{y}=g^{-1}(X\beta)\)</span></li>
+<li>A data distribution <span class="math inline">\(p(y|\hat{y})\)</span></li>
+<li>Other parameters involved either in 2,3 or 4.</li>
+</ol>
+<ul>
+<li>Linear regression: <span class="math inline">\(g(u)\equiv u\)</span> and data distribution normal</li>
+<li>Logistic regression: <span class="math inline">\(g^{-1}(u)=\text{logit}^{-1}(u)\)</span> and data distribution defined by <span class="math inline">\(\mathbb{P}[y=1]=\hat{y}\)</span></li>
+</ul>
+</div>
+<div id="poisson-regression" class="section level2">
+<h2><span class="header-section-number">5.2</span> Poisson regression</h2>
+<p>In count-data regressions, each unit i corresponds to a setting (typically a spatial location or a time-interval) in which <span class="math inline">\(y_i\)</span> events are observed.</p>
+<p>The model that generates the data in a Poisson regression model is:</p>
+<p><span class="math display">\[\begin{align*}
+y_i &amp;\sim \text{Poisson}(\lambda_i) \\
+\lambda_i &amp;=\exp(X_i\beta)
+\end{align*}\]</span></p>
 <p><em>Questions</em></p>
 <ol style="list-style-type: decimal">
-<li>What type of probability model is involved in linear regression?</li>
-<li>What about Fisher’s exact test?</li>
-<li>What about nonparametric tests (Mann-Whitney etc.)?</li>
+<li>Why not using linear regression directly?</li>
+<li>What is the link function for the Poisson regression model?</li>
+<li>What is the mean and the variance of a Poisson random variable?</li>
 </ol>
-<p>Regression, which is the main topic in this course, can be seen as a <strong>measurement error model</strong>. Under these models, we are interested in learning about some underlying pattern. One simple example is linear regression with one predictor with data measured with error, i.e., <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span>.</p>
-<div id="sampling-distribution" class="section level2">
-<h2><span class="header-section-number">2.1</span> Sampling distribution</h2>
-<p><strong>Sampling distribution</strong> may be considered as the distribution of the statistic for all possible samples from the same population of a given sample size.</p>
-<ul>
-<li>Random sampling. Simple random sample of size <span class="math inline">\(n\)</span> from a population of size <span class="math inline">\(N\)</span>.</li>
-<li>Measurement error model. Observations <span class="math inline">\(y_i\)</span> generated from the model <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span> with a prespecified distribution for the errors, e.g., <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\sigma)\)</span></li>
-</ul>
-<p>Most of the time the sampling distribution will not be known, therefore we can only <strong>estimate</strong> it. Let’s see this using the following example using the previous measurment error model <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span>. We set up</p>
-<p><span class="math display">\[
-a=3,\space b=2,\space \epsilon_i \sim \mathcal{N}(0,1),\space x_i\sim\mathcal{N}(0,2); \space i=1,...,100
-\]</span></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="intro.html#cb1-1"></a>a=<span class="dv">3</span></span>
-<span id="cb1-2"><a href="intro.html#cb1-2"></a>b=<span class="dv">2</span></span>
-<span id="cb1-3"><a href="intro.html#cb1-3"></a>n=<span class="dv">100</span></span>
-<span id="cb1-4"><a href="intro.html#cb1-4"></a>epsilon=<span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>)</span>
-<span id="cb1-5"><a href="intro.html#cb1-5"></a>x=<span class="kw">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">2</span>)</span>
-<span id="cb1-6"><a href="intro.html#cb1-6"></a>y=a<span class="op">+</span>b<span class="op">*</span>x<span class="op">+</span>epsilon</span></code></pre></div>
-<p>Now let’s fit a linear model to our fake data. Table <a href="intro.html#tab:CI">2.1</a> shows the 95% CI for the fitted slope and intercept.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="intro.html#cb2-1"></a>model=<span class="kw">lm</span>(y<span class="op">~</span>x)</span>
-<span id="cb2-2"><a href="intro.html#cb2-2"></a><span class="kw">summary</span>(model)</span></code></pre></div>
+<p>As always, let’s fake data and fit the model to our simulated data:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="generalized-linear-models.html#cb22-1"></a>n=<span class="dv">50</span></span>
+<span id="cb22-2"><a href="generalized-linear-models.html#cb22-2"></a>x=<span class="kw">runif</span>(n, <span class="dv">-2</span>, <span class="dv">2</span>)</span>
+<span id="cb22-3"><a href="generalized-linear-models.html#cb22-3"></a>a=<span class="dv">1</span></span>
+<span id="cb22-4"><a href="generalized-linear-models.html#cb22-4"></a>b=<span class="dv">2</span></span>
+<span id="cb22-5"><a href="generalized-linear-models.html#cb22-5"></a>linpred=a <span class="op">+</span><span class="st"> </span>b<span class="op">*</span>x</span>
+<span id="cb22-6"><a href="generalized-linear-models.html#cb22-6"></a>y=<span class="kw">rpois</span>(n, <span class="kw">exp</span>(linpred))</span>
+<span id="cb22-7"><a href="generalized-linear-models.html#cb22-7"></a>fake=<span class="kw">data.frame</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="generalized-linear-models.html#cb23-1"></a>fit3=<span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> fake,<span class="dt">family =</span> poisson)</span>
+<span id="cb23-2"><a href="generalized-linear-models.html#cb23-2"></a><span class="kw">summary</span>(fit3)</span></code></pre></div>
 <pre><code>## 
 ## Call:
-## lm(formula = y ~ x)
+## glm(formula = y ~ x, family = poisson, data = fake)
 ## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -2.79206 -0.53032  0.07969  0.78975  2.64151 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.6633  -0.5726  -0.3578   0.4056   3.0637  
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  2.95501    0.11116   26.58   &lt;2e-16 ***
-## x            2.00381    0.05835   34.34   &lt;2e-16 ***
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  0.97206    0.11201   8.679   &lt;2e-16 ***
+## x            2.02152    0.06539  30.912   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.112 on 98 degrees of freedom
-## Multiple R-squared:  0.9233, Adjusted R-squared:  0.9225 
-## F-statistic:  1179 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
-<table>
-<caption><span id="tab:CI">Table 2.1: </span>95% CI for intercept and slope</caption>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">2.5 %</th>
-<th align="right">97.5 %</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">2.734421</td>
-<td align="right">3.175603</td>
-</tr>
-<tr class="even">
-<td align="left">x</td>
-<td align="right">1.888022</td>
-<td align="right">2.119591</td>
-</tr>
-</tbody>
-</table>
-<p>Some authors say that the sampling distribution is a <strong>generative model</strong> because it represents a random process wich could potentially generate new data.</p>
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 2467.204  on 49  degrees of freedom
+## Residual deviance:   44.994  on 48  degrees of freedom
+## AIC: 169.78
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="generalized-linear-models.html#cb25-1"></a><span class="kw">plot</span>(x, y)</span>
+<span id="cb25-2"><a href="generalized-linear-models.html#cb25-2"></a><span class="kw">curve</span>(<span class="kw">exp</span>(<span class="kw">coef</span>(fit3)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">coef</span>(fit3)[<span class="dv">2</span>]<span class="op">*</span>x), <span class="dt">add=</span><span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:fig5"></span>
+<img src="Notes_files/figure-html/fig5-1.png" alt="Observed and fitted" width="672" />
+<p class="caption">
+Figure 5.1: Observed and fitted
+</p>
 </div>
-<div id="estimates-and-standard-erors" class="section level2">
-<h2><span class="header-section-number">2.2</span> Estimates and standard erors</h2>
-<p><strong>Parameters</strong> are unknown numbers that determine a statistical model. As mentioned before, we learn from data to construct <strong>estimates</strong> of parameters.</p>
-<p><em>Question</em></p>
-<ol style="list-style-type: decimal">
-<li>What are the parameters in the measurement error model used previously?</li>
-</ol>
-<p>The <strong>standard error</strong> is the standard deviation of an estimate. It gives us an idea of the uncertainty sorrounding the quantity of interest. As sample size increases, the standard error decreases, i.e.,</p>
+<div id="exposure" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Exposure</h3>
+<p>Most applications of count-data regression involve an <em>exposure</em>. A simple example can be the number of adverse events in a period of time. It is logical to expect a greater number of these events for those patients followed for a longer period of time.</p>
+<p>We can include this exposure <span class="math inline">\(u_i\)</span> as</p>
 <p><span class="math display">\[
-SE=\frac{\sigma}{n} \implies \lim_{n\to\infty}\frac{\sigma}{n}=0
+\begin{align*}
+y_i &amp;\sim \text{Poisson}(\lambda_i) \\
+\lambda_i &amp;= u_i\exp(X_i\beta)  
+\end{align*}
 \]</span></p>
+</div>
+</div>
+<div id="negative-binomial-regression-model" class="section level2">
+<h2><span class="header-section-number">5.3</span> Negative Binomial regression model</h2>
+<p>Overdispersion and underdispersion refer to data that show more or less variation than expected based on a fitted probability model. The <em>negative binomial</em> regression model which accounts for dispersion. In this model, <span class="math inline">\(\phi\)</span> represents “reciprocal dispersion” parameter so that <span class="math inline">\(sd(y|x)=\sqrt{\mathbb{E}(y|x)+\mathbb{E}(y|x)^2/\phi}\)</span>. Therefore</p>
+<p><span class="math display">\[
+\begin{align*}
+y_i &amp;\sim \text{NB}(\lambda_i,\phi) \\
+\lambda_i &amp;=\exp(X_i\beta) 
+\end{align*}
+\]</span>
+Exposure can be incorporated in negative binomial models</p>
+</div>
+<div id="example-pest-management-on-roaches-reducing-cockroach-level" class="section level2">
+<h2><span class="header-section-number">5.4</span> Example: pest management on Roaches reducing cockroach level</h2>
+<p>We will use the <code>roaches</code> dataset from <code>rstanarm</code> in <code>R</code>, which study the effect of a treatment and control in pest control. The outcome <span class="math inline">\(y_i\)</span> in each apartment <span class="math inline">\(i\)</span> was the number of roaches caught in a set of traps. Different apartments had traps for different numbers of days. We fitted a negative binomial and Poisson model to our data.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="generalized-linear-models.html#cb26-1"></a><span class="kw">library</span>(MASS)</span>
+<span id="cb26-2"><a href="generalized-linear-models.html#cb26-2"></a>roaches=rstanarm<span class="op">::</span>roaches</span>
+<span id="cb26-3"><a href="generalized-linear-models.html#cb26-3"></a>roaches<span class="op">$</span>roach100=roaches<span class="op">$</span>roach1<span class="op">/</span><span class="dv">100</span></span>
+<span id="cb26-4"><a href="generalized-linear-models.html#cb26-4"></a>fit4=<span class="kw">glm.nb</span>(y <span class="op">~</span><span class="st"> </span>roach100 <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>senior <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(<span class="kw">log</span>(exposure2)), <span class="dt">data=</span>roaches)</span>
+<span id="cb26-5"><a href="generalized-linear-models.html#cb26-5"></a><span class="kw">summary</span>(fit4)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm.nb(formula = y ~ roach100 + treatment + senior + offset(log(exposure2)), 
+##     data = roaches, init.theta = 0.2742646256, link = log)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.8014  -1.3282  -0.6850  -0.0218   3.2021  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   2.8388     0.2134  13.301  &lt; 2e-16 ***
+## roach100      1.2882     0.1590   8.102 5.43e-16 ***
+## treatment    -0.7768     0.2445  -3.177  0.00149 ** 
+## senior       -0.3444     0.2631  -1.309  0.19059    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for Negative Binomial(0.2743) family taken to be 1)
+## 
+##     Null deviance: 344.06  on 261  degrees of freedom
+## Residual deviance: 277.78  on 258  degrees of freedom
+## AIC: 1788.6
+## 
+## Number of Fisher Scoring iterations: 1
+## 
+## 
+##               Theta:  0.2743 
+##           Std. Err.:  0.0262 
+## 
+##  2 x log-likelihood:  -1778.5830</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="generalized-linear-models.html#cb28-1"></a>fit5=<span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>roach100 <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>senior <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(<span class="kw">log</span>(exposure2)),<span class="dt">family=</span>poisson, </span>
+<span id="cb28-2"><a href="generalized-linear-models.html#cb28-2"></a>         <span class="dt">data=</span>roaches)</span>
+<span id="cb28-3"><a href="generalized-linear-models.html#cb28-3"></a><span class="kw">summary</span>(fit5)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = y ~ roach100 + treatment + senior + offset(log(exposure2)), 
+##     family = poisson, data = roaches)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -17.9430   -5.1529   -3.8059    0.1452   26.7771  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  3.089246   0.021234  145.49   &lt;2e-16 ***
+## roach100     0.698289   0.008874   78.69   &lt;2e-16 ***
+## treatment   -0.516726   0.024739  -20.89   &lt;2e-16 ***
+## senior      -0.379875   0.033418  -11.37   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for poisson family taken to be 1)
+## 
+##     Null deviance: 16954  on 261  degrees of freedom
+## Residual deviance: 11429  on 258  degrees of freedom
+## AIC: 12192
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
 
 </div>
 </div>
@@ -273,8 +351,8 @@ SE=\frac{\sigma}{n} \implies \lim_{n\to\infty}\frac{\sigma}{n}=0
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="logistic-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

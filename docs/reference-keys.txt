@@ -2,6 +2,7 @@ tab:CI
 tab:unnamed-chunk-5
 fig:fig1
 fig:fig4
+fig:fig5
 introduction
 intro
 sampling-distribution
@@ -11,7 +12,13 @@ background
 simple-regression-with-fake-data
 interpretation-of-coefficients-and-model-diagnostics
 outliers-and-how-to-diagnose-them
-studentized-resiudals
+studentized-residuals
 difference-in-fits-dffits
 logistic-regression
 interpretation-of-coefficients-and-model-diagnostics-1
+generalized-linear-models
+introduction-1
+poisson-regression
+exposure
+negative-binomial-regression-model
+example-pest-management-on-roaches-reducing-cockroach-level

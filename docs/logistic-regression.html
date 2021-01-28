@@ -24,7 +24,7 @@
 <meta name="author" content="Juan Pablo Diaz Martinez" />
 
 
-<meta name="date" content="2021-01-22" />
+<meta name="date" content="2021-01-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="linear-regression.html"/>
-<link rel="next" href="references.html"/>
+<link rel="next" href="generalized-linear-models.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -146,12 +146,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-with-fake-data"><i class="fa fa-check"></i><b>3.2</b> Simple regression with fake data</a></li>
 <li class="chapter" data-level="3.3" data-path="linear-regression.html"><a href="linear-regression.html#interpretation-of-coefficients-and-model-diagnostics"><i class="fa fa-check"></i><b>3.3</b> Interpretation of coefficients and model diagnostics</a></li>
 <li class="chapter" data-level="3.4" data-path="linear-regression.html"><a href="linear-regression.html#outliers-and-how-to-diagnose-them"><i class="fa fa-check"></i><b>3.4</b> Outliers and how to diagnose them</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="linear-regression.html"><a href="linear-regression.html#studentized-resiudals"><i class="fa fa-check"></i><b>3.4.1</b> Studentized resiudals</a></li>
+<li class="chapter" data-level="3.4.1" data-path="linear-regression.html"><a href="linear-regression.html#studentized-residuals"><i class="fa fa-check"></i><b>3.4.1</b> Studentized residuals</a></li>
 <li class="chapter" data-level="3.4.2" data-path="linear-regression.html"><a href="linear-regression.html#difference-in-fits-dffits"><i class="fa fa-check"></i><b>3.4.2</b> Difference in Fits (DFFITS)</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>4</b> Logistic regression</a><ul>
 <li class="chapter" data-level="4.1" data-path="logistic-regression.html"><a href="logistic-regression.html#interpretation-of-coefficients-and-model-diagnostics-1"><i class="fa fa-check"></i><b>4.1</b> Interpretation of coefficients and model diagnostics</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a><ul>
+<li class="chapter" data-level="5.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#introduction-1"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson-regression"><i class="fa fa-check"></i><b>5.2</b> Poisson regression</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#exposure"><i class="fa fa-check"></i><b>5.2.1</b> Exposure</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial-regression-model"><i class="fa fa-check"></i><b>5.3</b> Negative Binomial regression model</a></li>
+<li class="chapter" data-level="5.4" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#example-pest-management-on-roaches-reducing-cockroach-level"><i class="fa fa-check"></i><b>5.4</b> Example: pest management on Roaches reducing cockroach level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -192,8 +200,7 @@ logit^{-1}(x)=\frac{\exp{(x)}}{1+\exp{(x)}}
 \mathbb{P}[y_i=1] &amp;= p_i \\
 logit(p_i) &amp;= X_i\beta
 \end{aligned}
-\]</span>
-## Assumptions</p>
+\]</span></p>
 <div id="interpretation-of-coefficients-and-model-diagnostics-1" class="section level2">
 <h2><span class="header-section-number">4.1</span> Interpretation of coefficients and model diagnostics</h2>
 <p><em>Logistic regression diagnostics</em></p>
@@ -202,7 +209,7 @@ logit(p_i) &amp;= X_i\beta
 <li>No influential observations.</li>
 </ol>
 <p>First we need to load the dataset to be used in this chapter.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="logistic-regression.html#cb14-1"></a>df=<span class="kw">read.csv</span>(<span class="st">&quot;data/tutorial2.csv&quot;</span>)</span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="logistic-regression.html#cb14-1"></a>df=<span class="kw">read.csv</span>(<span class="st">&quot;SAS Jupyter/tutorial2.csv&quot;</span>)</span>
 <span id="cb14-2"><a href="logistic-regression.html#cb14-2"></a><span class="kw">kable</span>(<span class="kw">head</span>(df), <span class="dt">booktabs =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <table>
 <thead>
@@ -379,7 +386,7 @@ logit(p_i) &amp;= X_i\beta
         </div>
       </div>
 <a href="linear-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="generalized-linear-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

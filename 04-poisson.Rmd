@@ -1,0 +1,101 @@
+# Generalized linear models
+
+## Introduction
+
+**Generalized linear modeling** (GLM) is a framework which encompasses linear and logistic regression as special cases. It involves:
+
+1. An outcome $y=(y_1,\dots,y_n)$
+2. A matrix of predictors $X$ and a vector of coefficients $\beta$, which turns into the linear predictor $X\beta$
+3. A **link function** $g$, which maps the linear predictor with the outcome $\hat{y}=g^{-1}(X\beta)$
+4. A data distribution $p(y|\hat{y})$
+5. Other parameters involved either in 2,3 or 4.
+
+- Linear regression: $g(u)\equiv u$ and data distribution normal
+- Logistic regression: $g^{-1}(u)=\text{logit}^{-1}(u)$ and data distribution defined by $\mathbb{P}[y=1]=\hat{y}$ 
+
+## Poisson regression
+
+In count-data regressions, each unit i corresponds to a setting (typically a spatial location or a time-interval) in which $y_i$ events are observed.
+
+
+The model that generates the data in a Poisson regression model is:
+
+\begin{align*}
+y_i &\sim \text{Poisson}(\lambda_i) \\
+\lambda_i &=\exp(X_i\beta)
+\end{align*}
+
+*Questions*
+
+1. Why not using linear regression directly?
+2. What is the link function for the Poisson regression model?
+3. What is the mean and the variance of a Poisson random variable?
+
+As always, let's fake data and fit the model to our simulated data:
+
+```{r warning=FALSE,message=FALSE}
+n=50
+x=runif(n, -2, 2)
+a=1
+b=2
+linpred=a + b*x
+y=rpois(n, exp(linpred))
+fake=data.frame(x=x, y=y)
+```
+
+```{r warning=FALSE,message=FALSE}
+fit3=glm(y ~ x, data = fake,family = poisson)
+summary(fit3)
+```
+
+```{r fig5, warning=FALSE,message=FALSE, fig.cap="Observed and fitted"}
+plot(x, y)
+curve(exp(coef(fit3)[1] + coef(fit3)[2]*x), add=TRUE)
+```
+
+### Exposure
+
+Most applications of count-data regression involve an *exposure*. A simple example can be the number of adverse events in a period of time. It is logical to expect a greater number of these events for those patients followed for a longer period of time.
+
+We can include this exposure $u_i$ as
+
+$$
+\begin{align*}
+y_i &\sim \text{Poisson}(\lambda_i) \\
+\lambda_i &= u_i\exp(X_i\beta)  
+\end{align*}
+$$
+
+
+
+## Negative Binomial regression model
+
+Overdispersion and underdispersion refer to data that show more or less variation than expected based on a fitted probability model. The *negative binomial* regression model which accounts for dispersion. In this model, $\phi$ represents “reciprocal dispersion” parameter so that $sd(y|x)=\sqrt{\mathbb{E}(y|x)+\mathbb{E}(y|x)^2/\phi}$. Therefore 
+
+$$
+\begin{align*}
+y_i &\sim \text{NB}(\lambda_i,\phi) \\
+\lambda_i &=\exp(X_i\beta) 
+\end{align*}
+$$
+Exposure can be incorporated in negative binomial models
+
+## Example: pest management on Roaches reducing cockroach level
+
+We will use the `roaches` dataset from `rstanarm` in `R`, which study the effect of a treatment and control in pest control. The outcome  $y_i$ in each apartment $i$ was the number of roaches caught in a set of traps. Different apartments had traps for different numbers of days. We fitted a negative binomial and Poisson model to our data.
+
+```{r warning=FALSE,message=FALSE}
+library(MASS)
+roaches=rstanarm::roaches
+roaches$roach100=roaches$roach1/100
+fit4=glm.nb(y ~ roach100 + treatment + senior + offset(log(exposure2)), data=roaches)
+summary(fit4)
+```
+
+```{r warning=FALSE,message=FALSE}
+fit5=glm(y ~ roach100 + treatment + senior + offset(log(exposure2)),family=poisson, 
+         data=roaches)
+summary(fit5)
+```
+
+

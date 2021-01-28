@@ -84,9 +84,9 @@ plot(fit2)
 
 ## Outliers and how to diagnose them
 
-Let's recall our linear model, i.e., $y_i=a+bx_i+\epsilon_i\space \epsilon_i\sim \mathcal{N}(0,\sigma)$. Why is important to check the outliers after fitting our model? Because sometimes we can encounter potential outliers that could influence the regression model in the sense of pulling our fitted model towards these outliers. 
+Let's recall our linear model, i.e., $y_i=a+bx_i+\epsilon_i,\quad \epsilon_i\sim \mathcal{N}(0,\sigma)$. Why is important to check the outliers after fitting our model? Because sometimes we can encounter potential outliers that could influence the regression model in the sense of pulling our fitted model towards these outliers. 
 
-### Studentized resiudals
+### Studentized residuals
 
 After fitting our linear model, we get
 

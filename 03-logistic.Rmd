@@ -22,7 +22,6 @@ $$
 logit(p_i) &= X_i\beta
 \end{aligned}
 $$
-## Assumptions
 
 ## Interpretation of coefficients and model diagnostics
 
@@ -34,7 +33,7 @@ $$
 First we need to load the dataset to be used in this chapter.
 
 ```{r warning=FALSE,message=FALSE}
-df=read.csv("data/tutorial2.csv")
+df=read.csv("SAS Jupyter/tutorial2.csv")
 kable(head(df), booktabs = TRUE)
 df$Treatment=as.factor(df$Treatment)
 df$Pain=as.factor(df$Pain)
