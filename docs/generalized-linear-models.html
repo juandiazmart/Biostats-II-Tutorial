@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 5 Generalized linear models | Tutorial notes for Biostatistics II</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 5 Generalized linear models | Tutorial notes for Biostatistics II" />
   <meta property="og:type" content="book" />
-  
   
   <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -24,7 +23,7 @@
 <meta name="author" content="Juan Pablo Diaz Martinez" />
 
 
-<meta name="date" content="2021-01-28" />
+<meta name="date" content="2024-01-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,8 @@
   
 <link rel="prev" href="logistic-regression.html"/>
 <link rel="next" href="references.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,25 +49,24 @@
 
 
 
-
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -87,7 +86,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -120,6 +119,33 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -136,26 +162,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Tutorial notes for Biostats II</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Statistical inference</a><ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Common pitfalls in statistical analysis</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#p-values"><i class="fa fa-check"></i><b>1.1</b> p-values</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#table-1"><i class="fa fa-check"></i><b>1.2</b> Table 1</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#variables"><i class="fa fa-check"></i><b>1.3</b> Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Statistical inference</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#sampling-distribution"><i class="fa fa-check"></i><b>2.1</b> Sampling distribution</a></li>
 <li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#estimates-and-standard-erors"><i class="fa fa-check"></i><b>2.2</b> Estimates and standard erors</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>3</b> Linear regression</a><ul>
+<li class="chapter" data-level="3" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>3</b> Linear regression</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="linear-regression.html"><a href="linear-regression.html#background"><i class="fa fa-check"></i><b>3.1</b> Background</a></li>
 <li class="chapter" data-level="3.2" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-with-fake-data"><i class="fa fa-check"></i><b>3.2</b> Simple regression with fake data</a></li>
 <li class="chapter" data-level="3.3" data-path="linear-regression.html"><a href="linear-regression.html#interpretation-of-coefficients-and-model-diagnostics"><i class="fa fa-check"></i><b>3.3</b> Interpretation of coefficients and model diagnostics</a></li>
-<li class="chapter" data-level="3.4" data-path="linear-regression.html"><a href="linear-regression.html#outliers-and-how-to-diagnose-them"><i class="fa fa-check"></i><b>3.4</b> Outliers and how to diagnose them</a><ul>
+<li class="chapter" data-level="3.4" data-path="linear-regression.html"><a href="linear-regression.html#outliers-and-how-to-diagnose-them"><i class="fa fa-check"></i><b>3.4</b> Outliers and how to diagnose them</a>
+<ul>
 <li class="chapter" data-level="3.4.1" data-path="linear-regression.html"><a href="linear-regression.html#studentized-residuals"><i class="fa fa-check"></i><b>3.4.1</b> Studentized residuals</a></li>
 <li class="chapter" data-level="3.4.2" data-path="linear-regression.html"><a href="linear-regression.html#difference-in-fits-dffits"><i class="fa fa-check"></i><b>3.4.2</b> Difference in Fits (DFFITS)</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>4</b> Logistic regression</a><ul>
+<li class="chapter" data-level="4" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>4</b> Logistic regression</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="logistic-regression.html"><a href="logistic-regression.html#interpretation-of-coefficients-and-model-diagnostics-1"><i class="fa fa-check"></i><b>4.1</b> Interpretation of coefficients and model diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a><ul>
-<li class="chapter" data-level="5.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#introduction-1"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
-<li class="chapter" data-level="5.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson-regression"><i class="fa fa-check"></i><b>5.2</b> Poisson regression</a><ul>
+<li class="chapter" data-level="5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#introduction"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson-regression"><i class="fa fa-check"></i><b>5.2</b> Poisson regression</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#exposure"><i class="fa fa-check"></i><b>5.2.1</b> Exposure</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial-regression-model"><i class="fa fa-check"></i><b>5.3</b> Negative Binomial regression model</a></li>
@@ -182,10 +219,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="generalized-linear-models" class="section level1">
-<h1><span class="header-section-number">Chapter 5</span> Generalized linear models</h1>
-<div id="introduction-1" class="section level2">
-<h2><span class="header-section-number">5.1</span> Introduction</h2>
+<div id="generalized-linear-models" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Generalized linear models<a href="generalized-linear-models.html#generalized-linear-models" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Introduction<a href="generalized-linear-models.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Generalized linear modeling</strong> (GLM) is a framework which encompasses linear and logistic regression as special cases. It involves:</p>
 <ol style="list-style-type: decimal">
 <li>An outcome <span class="math inline">\(y=(y_1,\dots,y_n)\)</span></li>
@@ -199,8 +236,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Logistic regression: <span class="math inline">\(g^{-1}(u)=\text{logit}^{-1}(u)\)</span> and data distribution defined by <span class="math inline">\(\mathbb{P}[y=1]=\hat{y}\)</span></li>
 </ul>
 </div>
-<div id="poisson-regression" class="section level2">
-<h2><span class="header-section-number">5.2</span> Poisson regression</h2>
+<div id="poisson-regression" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Poisson regression<a href="generalized-linear-models.html#poisson-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In count-data regressions, each unit i corresponds to a setting (typically a spatial location or a time-interval) in which <span class="math inline">\(y_i\)</span> events are observed.</p>
 <p>The model that generates the data in a Poisson regression model is:</p>
 <p><span class="math display">\[\begin{align*}
@@ -214,47 +251,47 @@ y_i &amp;\sim \text{Poisson}(\lambda_i) \\
 <li>What is the mean and the variance of a Poisson random variable?</li>
 </ol>
 <p>As always, let’s fake data and fit the model to our simulated data:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="generalized-linear-models.html#cb22-1"></a>n=<span class="dv">50</span></span>
-<span id="cb22-2"><a href="generalized-linear-models.html#cb22-2"></a>x=<span class="kw">runif</span>(n, <span class="dv">-2</span>, <span class="dv">2</span>)</span>
-<span id="cb22-3"><a href="generalized-linear-models.html#cb22-3"></a>a=<span class="dv">1</span></span>
-<span id="cb22-4"><a href="generalized-linear-models.html#cb22-4"></a>b=<span class="dv">2</span></span>
-<span id="cb22-5"><a href="generalized-linear-models.html#cb22-5"></a>linpred=a <span class="op">+</span><span class="st"> </span>b<span class="op">*</span>x</span>
-<span id="cb22-6"><a href="generalized-linear-models.html#cb22-6"></a>y=<span class="kw">rpois</span>(n, <span class="kw">exp</span>(linpred))</span>
-<span id="cb22-7"><a href="generalized-linear-models.html#cb22-7"></a>fake=<span class="kw">data.frame</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y)</span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="generalized-linear-models.html#cb23-1"></a>fit3=<span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> fake,<span class="dt">family =</span> poisson)</span>
-<span id="cb23-2"><a href="generalized-linear-models.html#cb23-2"></a><span class="kw">summary</span>(fit3)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="generalized-linear-models.html#cb24-1" aria-hidden="true" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">50</span></span>
+<span id="cb24-2"><a href="generalized-linear-models.html#cb24-2" aria-hidden="true" tabindex="-1"></a>x<span class="ot">=</span><span class="fu">runif</span>(n, <span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb24-3"><a href="generalized-linear-models.html#cb24-3" aria-hidden="true" tabindex="-1"></a>a<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb24-4"><a href="generalized-linear-models.html#cb24-4" aria-hidden="true" tabindex="-1"></a>b<span class="ot">=</span><span class="dv">2</span></span>
+<span id="cb24-5"><a href="generalized-linear-models.html#cb24-5" aria-hidden="true" tabindex="-1"></a>linpred<span class="ot">=</span>a <span class="sc">+</span> b<span class="sc">*</span>x</span>
+<span id="cb24-6"><a href="generalized-linear-models.html#cb24-6" aria-hidden="true" tabindex="-1"></a>y<span class="ot">=</span><span class="fu">rpois</span>(n, <span class="fu">exp</span>(linpred))</span>
+<span id="cb24-7"><a href="generalized-linear-models.html#cb24-7" aria-hidden="true" tabindex="-1"></a>fake<span class="ot">=</span><span class="fu">data.frame</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="generalized-linear-models.html#cb25-1" aria-hidden="true" tabindex="-1"></a>fit3<span class="ot">=</span><span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> fake,<span class="at">family =</span> poisson)</span>
+<span id="cb25-2"><a href="generalized-linear-models.html#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit3)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = y ~ x, family = poisson, data = fake)
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -2.6633  -0.5726  -0.3578   0.4056   3.0637  
+## -2.1412  -0.7044  -0.3791   0.2430   1.8865  
 ## 
 ## Coefficients:
 ##             Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)  0.97206    0.11201   8.679   &lt;2e-16 ***
-## x            2.02152    0.06539  30.912   &lt;2e-16 ***
+## (Intercept)  1.07608    0.10867   9.902   &lt;2e-16 ***
+## x            1.99111    0.06732  29.579   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
 ## (Dispersion parameter for poisson family taken to be 1)
 ## 
-##     Null deviance: 2467.204  on 49  degrees of freedom
-## Residual deviance:   44.994  on 48  degrees of freedom
-## AIC: 169.78
+##     Null deviance: 2422.853  on 49  degrees of freedom
+## Residual deviance:   37.954  on 48  degrees of freedom
+## AIC: 188.99
 ## 
 ## Number of Fisher Scoring iterations: 4</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="generalized-linear-models.html#cb25-1"></a><span class="kw">plot</span>(x, y)</span>
-<span id="cb25-2"><a href="generalized-linear-models.html#cb25-2"></a><span class="kw">curve</span>(<span class="kw">exp</span>(<span class="kw">coef</span>(fit3)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">coef</span>(fit3)[<span class="dv">2</span>]<span class="op">*</span>x), <span class="dt">add=</span><span class="ot">TRUE</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:fig5"></span>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="generalized-linear-models.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y)</span>
+<span id="cb27-2"><a href="generalized-linear-models.html#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">exp</span>(<span class="fu">coef</span>(fit3)[<span class="dv">1</span>] <span class="sc">+</span> <span class="fu">coef</span>(fit3)[<span class="dv">2</span>]<span class="sc">*</span>x), <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:fig5"></span>
 <img src="Notes_files/figure-html/fig5-1.png" alt="Observed and fitted" width="672" />
 <p class="caption">
 Figure 5.1: Observed and fitted
 </p>
 </div>
-<div id="exposure" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> Exposure</h3>
+<div id="exposure" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Exposure<a href="generalized-linear-models.html#exposure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Most applications of count-data regression involve an <em>exposure</em>. A simple example can be the number of adverse events in a period of time. It is logical to expect a greater number of these events for those patients followed for a longer period of time.</p>
 <p>We can include this exposure <span class="math inline">\(u_i\)</span> as</p>
 <p><span class="math display">\[
@@ -265,25 +302,25 @@ y_i &amp;\sim \text{Poisson}(\lambda_i) \\
 \]</span></p>
 </div>
 </div>
-<div id="negative-binomial-regression-model" class="section level2">
-<h2><span class="header-section-number">5.3</span> Negative Binomial regression model</h2>
+<div id="negative-binomial-regression-model" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Negative Binomial regression model<a href="generalized-linear-models.html#negative-binomial-regression-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Overdispersion and underdispersion refer to data that show more or less variation than expected based on a fitted probability model. The <em>negative binomial</em> regression model which accounts for dispersion. In this model, <span class="math inline">\(\phi\)</span> represents “reciprocal dispersion” parameter so that <span class="math inline">\(sd(y|x)=\sqrt{\mathbb{E}(y|x)+\mathbb{E}(y|x)^2/\phi}\)</span>. Therefore</p>
 <p><span class="math display">\[
 \begin{align*}
 y_i &amp;\sim \text{NB}(\lambda_i,\phi) \\
-\lambda_i &amp;=\exp(X_i\beta) 
+\lambda_i &amp;=\exp(X_i\beta)
 \end{align*}
 \]</span>
 Exposure can be incorporated in negative binomial models</p>
 </div>
-<div id="example-pest-management-on-roaches-reducing-cockroach-level" class="section level2">
-<h2><span class="header-section-number">5.4</span> Example: pest management on Roaches reducing cockroach level</h2>
+<div id="example-pest-management-on-roaches-reducing-cockroach-level" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Example: pest management on Roaches reducing cockroach level<a href="generalized-linear-models.html#example-pest-management-on-roaches-reducing-cockroach-level" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We will use the <code>roaches</code> dataset from <code>rstanarm</code> in <code>R</code>, which study the effect of a treatment and control in pest control. The outcome <span class="math inline">\(y_i\)</span> in each apartment <span class="math inline">\(i\)</span> was the number of roaches caught in a set of traps. Different apartments had traps for different numbers of days. We fitted a negative binomial and Poisson model to our data.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="generalized-linear-models.html#cb26-1"></a><span class="kw">library</span>(MASS)</span>
-<span id="cb26-2"><a href="generalized-linear-models.html#cb26-2"></a>roaches=rstanarm<span class="op">::</span>roaches</span>
-<span id="cb26-3"><a href="generalized-linear-models.html#cb26-3"></a>roaches<span class="op">$</span>roach100=roaches<span class="op">$</span>roach1<span class="op">/</span><span class="dv">100</span></span>
-<span id="cb26-4"><a href="generalized-linear-models.html#cb26-4"></a>fit4=<span class="kw">glm.nb</span>(y <span class="op">~</span><span class="st"> </span>roach100 <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>senior <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(<span class="kw">log</span>(exposure2)), <span class="dt">data=</span>roaches)</span>
-<span id="cb26-5"><a href="generalized-linear-models.html#cb26-5"></a><span class="kw">summary</span>(fit4)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="generalized-linear-models.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb28-2"><a href="generalized-linear-models.html#cb28-2" aria-hidden="true" tabindex="-1"></a>roaches<span class="ot">=</span>rstanarm<span class="sc">::</span>roaches</span>
+<span id="cb28-3"><a href="generalized-linear-models.html#cb28-3" aria-hidden="true" tabindex="-1"></a>roaches<span class="sc">$</span>roach100<span class="ot">=</span>roaches<span class="sc">$</span>roach1<span class="sc">/</span><span class="dv">100</span></span>
+<span id="cb28-4"><a href="generalized-linear-models.html#cb28-4" aria-hidden="true" tabindex="-1"></a>fit4<span class="ot">=</span><span class="fu">glm.nb</span>(y <span class="sc">~</span> roach100 <span class="sc">+</span> treatment <span class="sc">+</span> senior <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(exposure2)), <span class="at">data=</span>roaches)</span>
+<span id="cb28-5"><a href="generalized-linear-models.html#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit4)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm.nb(formula = y ~ roach100 + treatment + senior + offset(log(exposure2)), 
@@ -315,9 +352,9 @@ Exposure can be incorporated in negative binomial models</p>
 ##           Std. Err.:  0.0262 
 ## 
 ##  2 x log-likelihood:  -1778.5830</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="generalized-linear-models.html#cb28-1"></a>fit5=<span class="kw">glm</span>(y <span class="op">~</span><span class="st"> </span>roach100 <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>senior <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(<span class="kw">log</span>(exposure2)),<span class="dt">family=</span>poisson, </span>
-<span id="cb28-2"><a href="generalized-linear-models.html#cb28-2"></a>         <span class="dt">data=</span>roaches)</span>
-<span id="cb28-3"><a href="generalized-linear-models.html#cb28-3"></a><span class="kw">summary</span>(fit5)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="generalized-linear-models.html#cb30-1" aria-hidden="true" tabindex="-1"></a>fit5<span class="ot">=</span><span class="fu">glm</span>(y <span class="sc">~</span> roach100 <span class="sc">+</span> treatment <span class="sc">+</span> senior <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(exposure2)),<span class="at">family=</span>poisson, </span>
+<span id="cb30-2"><a href="generalized-linear-models.html#cb30-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data=</span>roaches)</span>
+<span id="cb30-3"><a href="generalized-linear-models.html#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit5)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## glm(formula = y ~ roach100 + treatment + senior + offset(log(exposure2)), 
@@ -356,7 +393,6 @@ Exposure can be incorporated in negative binomial models</p>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -375,6 +411,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -395,6 +432,10 @@ gitbook.start({
 "text": null
 },
 "download": ["Notes.pdf", "Notes.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
@@ -408,7 +449,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
