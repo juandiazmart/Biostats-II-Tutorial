@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Statistical inference | Tutorial notes for Biostatistics II</title>
+  <title>Page not found | Tutorial notes for Biostatistics II</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Statistical inference | Tutorial notes for Biostatistics II" />
+  <meta property="og:title" content="Page not found | Tutorial notes for Biostatistics II" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Statistical inference | Tutorial notes for Biostatistics II" />
+  <meta name="twitter:title" content="Page not found | Tutorial notes for Biostatistics II" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="linear-regression.html"/>
+
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -219,106 +219,19 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">Chapter 2</span> Statistical inference<a href="intro.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>These notes are based on “Regression and other stories” by <span class="citation">Gelman, Hill, and Vehtari (<a href="#ref-gelman2020regression" role="doc-biblioref">2020</a>)</span>. Given the different background in statistics that we potentially have, this notes aim to have a standardized tool for tutorials. Finally, these notes aim to cover the same content as weekly lectures.</p>
-<p>Statistical inference involves math operations that result in estimates (and its uncertainties) about paramaters of some underlying process. We can think it as a learning process; we learn from data (incomplete or imperfect) with the objective of informing the parameters under a probability model.</p>
-<p><em>Questions</em></p>
-<ol style="list-style-type: decimal">
-<li>What type of probability model is involved in linear regression?</li>
-<li>What about Fisher’s exact test?</li>
-<li>What about nonparametric tests (Mann-Whitney etc.)?</li>
-</ol>
-<p>Regression, which is the main topic in this course, can be seen as a <strong>measurement error model</strong>. Under these models, we are interested in learning about some underlying pattern. One simple example is linear regression with one predictor with data measured with error, i.e., <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span>.</p>
-<div id="sampling-distribution" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> Sampling distribution<a href="intro.html#sampling-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Sampling distribution</strong> may be considered as the distribution of the statistic for all possible samples from the same population of a given sample size.</p>
-<ul>
-<li>Random sampling. Simple random sample of size <span class="math inline">\(n\)</span> from a population of size <span class="math inline">\(N\)</span>.</li>
-<li>Measurement error model. Observations <span class="math inline">\(y_i\)</span> generated from the model <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span> with a prespecified distribution for the errors, e.g., <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\sigma)\)</span></li>
-</ul>
-<p>Most of the time the sampling distribution will not be known, therefore we can only <strong>estimate</strong> it. Let’s see this using the following example using the previous measurment error model <span class="math inline">\(y_i=a+bx_i+\epsilon_i\)</span>. We set up</p>
-<p><span class="math display">\[
-a=3,\space b=2,\space \epsilon_i \sim \mathcal{N}(0,1),\space x_i\sim\mathcal{N}(0,2); \space i=1,...,100
-\]</span></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="intro.html#cb3-1" aria-hidden="true" tabindex="-1"></a>a<span class="ot">=</span><span class="dv">3</span></span>
-<span id="cb3-2"><a href="intro.html#cb3-2" aria-hidden="true" tabindex="-1"></a>b<span class="ot">=</span><span class="dv">2</span></span>
-<span id="cb3-3"><a href="intro.html#cb3-3" aria-hidden="true" tabindex="-1"></a>n<span class="ot">=</span><span class="dv">100</span></span>
-<span id="cb3-4"><a href="intro.html#cb3-4" aria-hidden="true" tabindex="-1"></a>epsilon<span class="ot">=</span><span class="fu">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">1</span>)</span>
-<span id="cb3-5"><a href="intro.html#cb3-5" aria-hidden="true" tabindex="-1"></a>x<span class="ot">=</span><span class="fu">rnorm</span>(n,<span class="dv">0</span>,<span class="dv">2</span>)</span>
-<span id="cb3-6"><a href="intro.html#cb3-6" aria-hidden="true" tabindex="-1"></a>y<span class="ot">=</span>a<span class="sc">+</span>b<span class="sc">*</span>x<span class="sc">+</span>epsilon</span></code></pre></div>
-<p>Now let’s fit a linear model to our fake data. Table <a href="intro.html#tab:CI">2.1</a> shows the 95% CI for the fitted slope and intercept.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="intro.html#cb4-1" aria-hidden="true" tabindex="-1"></a>model<span class="ot">=</span><span class="fu">lm</span>(y<span class="sc">~</span>x)</span>
-<span id="cb4-2"><a href="intro.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = y ~ x)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -2.23995 -0.68303  0.06612  0.56030  2.02661 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  3.00686    0.09414   31.94   &lt;2e-16 ***
-## x            2.00346    0.04598   43.57   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.9312 on 98 degrees of freedom
-## Multiple R-squared:  0.9509, Adjusted R-squared:  0.9504 
-## F-statistic:  1898 on 1 and 98 DF,  p-value: &lt; 2.2e-16</code></pre>
-<table>
-<caption><span id="tab:CI">Table 2.1: </span>95% CI for intercept and slope</caption>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="right">2.5 %</th>
-<th align="right">97.5 %</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">2.820047</td>
-<td align="right">3.193666</td>
-</tr>
-<tr class="even">
-<td align="left">x</td>
-<td align="right">1.912209</td>
-<td align="right">2.094713</td>
-</tr>
-</tbody>
-</table>
-<p>Some authors say that the sampling distribution is a <strong>generative model</strong> because it represents a random process wich could potentially generate new data.</p>
-</div>
-<div id="estimates-and-standard-erors" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> Estimates and standard erors<a href="intro.html#estimates-and-standard-erors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><strong>Parameters</strong> are unknown numbers that determine a statistical model. As mentioned before, we learn from data to construct <strong>estimates</strong> of parameters.</p>
-<p><em>Question</em></p>
-<ol style="list-style-type: decimal">
-<li>What are the parameters in the measurement error model used previously?</li>
-</ol>
-<p>The <strong>standard error</strong> is the standard deviation of an estimate. It gives us an idea of the uncertainty sorrounding the quantity of interest. As sample size increases, the standard error decreases, i.e.,</p>
-<p><span class="math display">\[
-SE=\frac{\sigma}{n} \implies \lim_{n\to\infty}\frac{\sigma}{n}=0
-\]</span></p>
-
-</div>
-</div>
-<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-gelman2020regression" class="csl-entry">
-Gelman, Andrew, Jennifer Hill, and Aki Vehtari. 2020. <em>Regression and Other Stories</em>. Cambridge University Press.
-</div>
+<div id="page-not-found" class="section level1">
+<h1>Page not found</h1>
+<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
+<p>You may want to try searching to find the page's new location, or use
+the table of contents to find the page you are looking for.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

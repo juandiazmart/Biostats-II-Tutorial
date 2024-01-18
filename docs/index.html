@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Tutorial notes for Biostatistics II</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.34 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Tutorial notes for Biostatistics II" />
   <meta property="og:type" content="book" />
-  
   
   <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -24,7 +23,7 @@
 <meta name="author" content="Juan Pablo Diaz Martinez" />
 
 
-<meta name="date" content="2021-01-28" />
+<meta name="date" content="2024-01-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,8 @@
   
 
 <link rel="next" href="intro.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,25 +49,24 @@
 
 
 
-
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -87,7 +86,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -120,6 +119,33 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -136,26 +162,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Tutorial notes for Biostats II</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Statistical inference</a><ul>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Common pitfalls in statistical analysis</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#p-values"><i class="fa fa-check"></i><b>1.1</b> p-values</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#table-1"><i class="fa fa-check"></i><b>1.2</b> Table 1</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#variables"><i class="fa fa-check"></i><b>1.3</b> Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Statistical inference</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="intro.html"><a href="intro.html#sampling-distribution"><i class="fa fa-check"></i><b>2.1</b> Sampling distribution</a></li>
 <li class="chapter" data-level="2.2" data-path="intro.html"><a href="intro.html#estimates-and-standard-erors"><i class="fa fa-check"></i><b>2.2</b> Estimates and standard erors</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>3</b> Linear regression</a><ul>
+<li class="chapter" data-level="3" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>3</b> Linear regression</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="linear-regression.html"><a href="linear-regression.html#background"><i class="fa fa-check"></i><b>3.1</b> Background</a></li>
 <li class="chapter" data-level="3.2" data-path="linear-regression.html"><a href="linear-regression.html#simple-regression-with-fake-data"><i class="fa fa-check"></i><b>3.2</b> Simple regression with fake data</a></li>
 <li class="chapter" data-level="3.3" data-path="linear-regression.html"><a href="linear-regression.html#interpretation-of-coefficients-and-model-diagnostics"><i class="fa fa-check"></i><b>3.3</b> Interpretation of coefficients and model diagnostics</a></li>
-<li class="chapter" data-level="3.4" data-path="linear-regression.html"><a href="linear-regression.html#outliers-and-how-to-diagnose-them"><i class="fa fa-check"></i><b>3.4</b> Outliers and how to diagnose them</a><ul>
+<li class="chapter" data-level="3.4" data-path="linear-regression.html"><a href="linear-regression.html#outliers-and-how-to-diagnose-them"><i class="fa fa-check"></i><b>3.4</b> Outliers and how to diagnose them</a>
+<ul>
 <li class="chapter" data-level="3.4.1" data-path="linear-regression.html"><a href="linear-regression.html#studentized-residuals"><i class="fa fa-check"></i><b>3.4.1</b> Studentized residuals</a></li>
 <li class="chapter" data-level="3.4.2" data-path="linear-regression.html"><a href="linear-regression.html#difference-in-fits-dffits"><i class="fa fa-check"></i><b>3.4.2</b> Difference in Fits (DFFITS)</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>4</b> Logistic regression</a><ul>
+<li class="chapter" data-level="4" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>4</b> Logistic regression</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="logistic-regression.html"><a href="logistic-regression.html#interpretation-of-coefficients-and-model-diagnostics-1"><i class="fa fa-check"></i><b>4.1</b> Interpretation of coefficients and model diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a><ul>
-<li class="chapter" data-level="5.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#introduction-1"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
-<li class="chapter" data-level="5.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson-regression"><i class="fa fa-check"></i><b>5.2</b> Poisson regression</a><ul>
+<li class="chapter" data-level="5" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html"><i class="fa fa-check"></i><b>5</b> Generalized linear models</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#introduction"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#poisson-regression"><i class="fa fa-check"></i><b>5.2</b> Poisson regression</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#exposure"><i class="fa fa-check"></i><b>5.2.1</b> Exposure</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="generalized-linear-models.html"><a href="generalized-linear-models.html#negative-binomial-regression-model"><i class="fa fa-check"></i><b>5.3</b> Negative Binomial regression model</a></li>
@@ -185,18 +222,72 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Tutorial notes for Biostatistics II</h1>
 <p class="author"><em>Juan Pablo Diaz Martinez</em></p>
-<p class="date"><em>2021-01-28</em></p>
+<p class="date"><em>2024-01-18</em></p>
 </div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction</h1>
-<p>These notes are based on “Regression and other stories” by <span class="citation">Gelman, Hill, and Vehtari (<a href="#ref-gelman2020regression" role="doc-biblioref">2020</a>)</span>. Given the different background in statistics that we potentially have, this notes aim to have a standardized tool for tutorials.</p>
-<p>Finally, these notes aim to cover the same content as weekly lectures.</p>
+<div id="common-pitfalls-in-statistical-analysis" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Common pitfalls in statistical analysis<a href="index.html#common-pitfalls-in-statistical-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="p-values" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> p-values<a href="index.html#p-values" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>The p-value is the probability of obtaining test results at least as extreme as the result actually observed, under the assumption that the null hypothesis is correct.</li>
+</ul>
+<p><strong>Example</strong></p>
+<p>Suppose we want to compare fasting serum-cholesterol levels among recent Asian immigrants to the United States with typical levels found in the general U.S. population. Suppose we assume cholesterol levels in women ages 21−40 in the United States are approximately normally distributed with mean 190 mg/dL. It is unknown whether cholesterol levels among recent Asian immigrants are higher or lower than those in the general U.S. population. Let’s assume that levels among recent female Asian immigrants are normally distributed with unknown mean <span class="math inline">\(\mu\)</span>. Hence we wish to test</p>
+<p><span class="math display">\[
+\begin{aligned}
+H_0 &amp;: \mu=\mu_0 \\
+H_1 &amp;: \mu \neq \mu_0
+\end{aligned}
+\]</span></p>
+<p>Blod tests are performed on 100 female Asian immigrants ages 21−40, and the mean level (x) is 181.52 mg/dL with standard error = 40 mg/dL. What can we conclude on the basis of this evidence?</p>
+<p>First, the test statistic would be:</p>
+<p><span class="math display">\[
+\begin{aligned}
+t &amp;= (\bar{x}-\mu_0)/(s/\sqrt{n}) \\
+t &amp;= -8.48/4 = -2.12
+\end{aligned}
+\]</span></p>
+<p>Under the null, this test statistic follows a t-distribution with <span class="math inline">\(n-1\)</span> degrees of freedom, i.e,</p>
+<p><span class="math display">\[
+t \sim t(n-1)
+\]</span></p>
+<p>Mathematically, for symmetric distributions (such as the t-distribution), the p-value for two-sided tests is define as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+p &amp;=2*\Pr[|T| \geq |t| \space | \space H_0] \\
+p &amp;=2*\Pr[|T| \geq 2.12 \space | \space H_0]=0.37
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(T\)</span> is the distribution under the null and <span class="math inline">\(t\)</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">*</span><span class="fu">pt</span>(<span class="fl">2.12</span>,<span class="at">df=</span><span class="dv">99</span>,<span class="at">lower.tail =</span> F)</span></code></pre></div>
+<pre><code>## [1] 0.03650607</code></pre>
+<p><strong>Missconceptions behind p-values</strong></p>
+<ol style="list-style-type: decimal">
+<li>The p-value is not the probability that the null hypothesis is true, or the probability that the alternative hypothesis is false</li>
+<li>The p-value is not the probability that the observed effects were produced by random chance alone</li>
+<li>The 0.05 significance level is merely a convention</li>
+<li>The p-value does not indicate the size or importance of the observed effect</li>
+</ol>
+</div>
+<div id="table-1" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Table 1<a href="index.html#table-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>It is recommended to not report p-values when comparing summary statistics between two or more groups because:
+<ol style="list-style-type: decimal">
+<li>Table 1 usually describes the study sample</li>
+<li>Valid p-values cannot be drawn without knowing, not just what was done with the existing data, but what the choices in data coding, exclusion, and analysis would have been, had the data been different</li>
+<li>Being significant does not imply anything in a regression context</li>
+</ol></li>
+<li>One recommendation is to report the standardized mean difference (SMD). The p-values are a function of a sample size, meaning that with a large sample most likelu we will find a significal difference.</li>
+</ul>
+</div>
+<div id="variables" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Variables<a href="index.html#variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Do not test for normality. Majority of parametric tests assumptions are based on the <em>mean</em> or the residuals (linear regression model)</li>
+<li>Report missing values</li>
+</ul>
 
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-gelman2020regression">
-<p>Gelman, Andrew, Jennifer Hill, and Aki Vehtari. 2020. <em>Regression and Other Stories</em>. Cambridge University Press.</p>
 </div>
 </div>
             </section>
@@ -209,7 +300,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -228,6 +318,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -248,6 +339,10 @@ gitbook.start({
 "text": null
 },
 "download": ["Notes.pdf", "Notes.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
@@ -261,7 +356,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

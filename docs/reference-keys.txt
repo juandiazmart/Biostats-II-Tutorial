@@ -1,9 +1,12 @@
 tab:CI
-tab:unnamed-chunk-5
+tab:unnamed-chunk-6
 fig:fig1
 fig:fig4
 fig:fig5
-introduction
+common-pitfalls-in-statistical-analysis
+p-values
+table-1
+variables
 intro
 sampling-distribution
 estimates-and-standard-erors
@@ -17,7 +20,7 @@ difference-in-fits-dffits
 logistic-regression
 interpretation-of-coefficients-and-model-diagnostics-1
 generalized-linear-models
-introduction-1
+introduction
 poisson-regression
 exposure
 negative-binomial-regression-model

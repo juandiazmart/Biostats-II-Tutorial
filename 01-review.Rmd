@@ -1,5 +1,8 @@
 # Statistical inference {#intro}
 
+These notes are based on "Regression and other stories" by @gelman2020regression. Given the different background in statistics that we potentially have, this notes aim to have a standardized tool for tutorials. Finally, these notes aim to cover the same content as weekly lectures.
+
+
 Statistical inference involves math operations that result in estimates (and its uncertainties) about paramaters of some underlying process. We can think it as a learning process; we learn from data (incomplete or imperfect) with the objective of informing the parameters under a probability model.
 
 *Questions*
